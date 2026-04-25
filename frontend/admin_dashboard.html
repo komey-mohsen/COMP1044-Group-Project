@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            margin: 0;
+        }
+        header {
+            background: #1f4e79;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header h2 { margin: 0; }
+        .logout-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .container {
+            width: 80%;
+            margin: 30px auto;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        }
+        a {
+            display: inline-block;
+            margin: 10px 15px 10px 0;
+            text-decoration: none;
+            color: white;
+            background: #007bff;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+        a:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Admin Dashboard</h2>
+        <a href="index.html" class="logout-btn">&#x2192; Logout</a>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h3>Student Management</h3>
+            <a href="add_student.html">Add Student</a>
+            <a href="update_student.html">Update Student</a>
+            <a href="delete_student.html">Delete Student</a>
+        </div>
+
+        <div class="card">
+            <h3>Internship Management</h3>
+            <a href="assign_internship.html">Assign Internship</a>
+            <a href="manage_internships.html">Manage Internships</a>
+        </div>
+
+        <div class="card">
+            <h3>Assessor Management</h3>
+            <a href="manage_assessors.html">Manage Assessors</a>
+        </div>
+
+        <div class="card">
+            <h3>Results</h3>
+            <a href="results.html">View Results</a>
+            <a href="all_results.html">View All Results</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Results</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #91a4d2, #c3b6e8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 460px;
+            background: #f8f8fb;
+            border-radius: 20px;
+            padding: 50px 44px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+            margin: 20px;
+        }
+
+        h2 {
+            margin: 0 0 30px;
+            font-size: 32px;
+            color: #111827;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 14px;
+            border: 1px solid #c7cedb;
+            border-radius: 10px;
+            font-size: 17px;
+            background: white;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: #4f6fd8;
+            box-shadow: 0 0 0 3px rgba(79, 111, 216, 0.15);
+        }
+
+        input.invalid {
+            border-color: #dc2626;
+        }
+
+        .field-hint {
+            font-size: 12px;
+            color: #9ca3af;
+            margin: 6px 0 8px;
+        }
+
+        .error-msg {
+            font-size: 13px;
+            color: #dc2626;
+            margin: 4px 0 12px;
+            display: none;
+        }
+
+        .btn-wrap {
+            text-align: center;
+            margin-top: 22px;
+            margin-bottom: 24px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #4e73df, #3d5fcb);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 44px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(61, 95, 203, 0.25);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px rgba(61, 95, 203, 0.32);
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #d8dce6;
+            margin: 0 0 20px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: #3559c7;
+            font-size: 16px;
+        }
+
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>View Results</h2>
+
+    <form action="../backend/results/view_results.php" method="POST" onsubmit="return validateResults(event)">
+        <label for="student_id">Student ID:</label>
+        <input
+            type="text"
+            id="student_id"
+            name="student_id"
+            placeholder="Enter Student ID (4–8 digits)"
+            required
+            minlength="4"
+            maxlength="8"
+            pattern="[0-9]{4,8}"
+            inputmode="numeric"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 8)"
+        >
+        <div class="field-hint">4 to 8 digits only</div>
+        <div class="error-msg" id="sid-error">Student ID must be 4–8 digits.</div>
+
+        <div class="btn-wrap">
+            <button type="submit">View Results</button>
+        </div>
+    </form>
+
+    <hr>
+    <a href="admin_dashboard.html" class="back-link">Back to Dashboard</a>
+</div>
+
+<script>
+function validateResults(e) {
+    const sid    = document.getElementById('student_id');
+    const sidErr = document.getElementById('sid-error');
+
+    sidErr.style.display = 'none';
+    sid.classList.remove('invalid');
+
+    if (!/^[0-9]{4,8}$/.test(sid.value.trim())) {
+        sidErr.style.display = 'block';
+        sid.classList.add('invalid');
+        e.preventDefault();
+        return false;
+    }
+    return true;
+}
+</script>
+
+</body>
+</html>

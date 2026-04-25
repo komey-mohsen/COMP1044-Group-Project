@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessor Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f8;
+            margin: 0;
+        }
+        header {
+            background: #2e7d32;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header h2 { margin: 0; }
+        .logout-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .container {
+            width: 80%;
+            margin: 30px auto;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        }
+        a {
+            display: inline-block;
+            margin-top: 12px;
+            text-decoration: none;
+            color: white;
+            background: #28a745;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+        a:hover {
+            background: #1f7a34;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Assessor Dashboard</h2>
+        <a href="index.html" class="logout-btn">&#x2192; Logout</a>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h3>Assessment</h3>
+            <p>Enter student marks and comments based on the official criteria.</p>
+            <a href="assessment.html">Open Assessment Form</a>
+        </div>
+
+        <div class="card">
+            <h3>Results</h3>
+            <a href="results.html">View Assessed Results</a>
+        </div>
+    </div>
+</body>
+</html>

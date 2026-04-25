@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 400px;
+            margin: 80px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input.error {
+            border: 1px solid red;
+        }
+
+        .error-msg {
+            color: red;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        a {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Add Student</h2>
+
+    <form action="../backend/student/add_student.php" method="POST" onsubmit="return validateForm()">
+
+        <input type="text" name="student_id" id="student_id" placeholder="Student ID (4-8 digits)" maxlength="8">
+        <div class="error-msg" id="err_id">Student ID must be 4-8 digits (numbers only).</div>
+
+        <input type="text" name="student_name" id="student_name" placeholder="Student Name">
+        <div class="error-msg" id="err_name">Name must be at least 3 characters and contain letters only.</div>
+
+        <input type="text" name="programme" id="programme" placeholder="Programme">
+        <div class="error-msg" id="err_programme">Programme must be at least 3 characters.</div>
+
+        <button type="submit">Add Student</button>
+
+    </form>
+
+    <a href="admin_dashboard.html">Back to Dashboard</a>
+</div>
+
+<script>
+    function validateForm() {
+        let valid = true;
+
+        // Student ID - exactly 4 digits
+        const id = document.getElementById('student_id').value.trim();
+        const idErr = document.getElementById('err_id');
+        const idInput = document.getElementById('student_id');
+        if (!/^\d{4}$/.test(id)) {
+            idErr.style.display = 'block';
+            idInput.classList.add('error');
+            valid = false;
+        } else {
+            idErr.style.display = 'none';
+            idInput.classList.remove('error');
+        }
+
+        // Student Name - letters and spaces only, min 3 chars
+        const name = document.getElementById('student_name').value.trim();
+        const nameErr = document.getElementById('err_name');
+        const nameInput = document.getElementById('student_name');
+        if (!/^[a-zA-Z\s]{3,}$/.test(name)) {
+            nameErr.style.display = 'block';
+            nameInput.classList.add('error');
+            valid = false;
+        } else {
+            nameErr.style.display = 'none';
+            nameInput.classList.remove('error');
+        }
+
+        // Programme - min 3 characters
+        const programme = document.getElementById('programme').value.trim();
+        const progErr = document.getElementById('err_programme');
+        const progInput = document.getElementById('programme');
+        if (programme.length < 3) {
+            progErr.style.display = 'block';
+            progInput.classList.add('error');
+            valid = false;
+        } else {
+            progErr.style.display = 'none';
+            progInput.classList.remove('error');
+        }
+
+        return valid;
+    }
+</script>
+
+</body>
+</html>   

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Internship</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #91a4d2, #c3b6e8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 700px;
+            background: #f8f8fb;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+        }
+
+        h2 {
+            margin: 0 0 35px;
+            font-size: 34px;
+            color: #111827;
+        }
+
+        label {
+            display: block;
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #1f2937;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px 16px;
+            margin-bottom: 30px;
+            font-size: 18px;
+            border: 1px solid #c7cedb;
+            border-radius: 10px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus {
+            border-color: #4f6fd8;
+            box-shadow: 0 0 0 3px rgba(79, 111, 216, 0.15);
+        }
+
+        input.invalid {
+            border-color: #dc2626;
+        }
+
+        .error-msg {
+            color: #dc2626;
+            font-size: 13px;
+            margin: -20px 0 18px;
+            display: none;
+        }
+
+        .field-hint {
+            font-size: 12px;
+            color: #9ca3af;
+            margin: -20px 0 18px;
+        }
+
+        .btn-wrap {
+            text-align: center;
+            margin-top: 8px;
+            margin-bottom: 28px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #4e73df, #3d5fcb);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(61, 95, 203, 0.25);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px rgba(61, 95, 203, 0.32);
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #d8dce6;
+            margin: 20px 0 24px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: #3559c7;
+            font-size: 18px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                margin: 20px;
+                padding: 30px 24px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            label {
+                font-size: 20px;
+            }
+
+            input {
+                font-size: 16px;
+                padding: 15px 14px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Assign Internship</h2>
+
+        <form action="../backend/internship/assign.php" method="POST" onsubmit="return validateAssign(event)">
+            <label for="student_id">Student ID:</label>
+            <input
+                type="text"
+                id="student_id"
+                name="student_id"
+                placeholder="Enter student ID (4–8 digits)"
+                required
+                minlength="4"
+                maxlength="8"
+                pattern="[0-9]{4,8}"
+                inputmode="numeric"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 8)"
+            >
+            <div class="field-hint">4 to 8 digits only</div>
+            <div class="error-msg" id="sid-error">Student ID must be 4–8 digits.</div>
+
+            <label for="company_name">Company Name:</label>
+            <input type="text" id="company_name" name="company_name"
+                   placeholder="Enter company name"
+                   required
+                   minlength="3">
+            <div class="field-hint">Minimum 3 characters</div>
+            <div class="error-msg" id="company-error">Company name must be at least 3 characters.</div>
+
+            <div class="btn-wrap">
+                <button type="submit">Assign</button>
+            </div>
+        </form>
+
+        <hr>
+        <a href="admin_dashboard.html" class="back-link">Back to Dashboard</a>
+    </div>
+
+<script>
+function validateAssign(e) {
+    let valid = true;
+    const sid     = document.getElementById('student_id');
+    const company = document.getElementById('company_name');
+    const sidErr  = document.getElementById('sid-error');
+    const coErr   = document.getElementById('company-error');
+
+    sidErr.style.display = 'none';
+    coErr.style.display  = 'none';
+    sid.classList.remove('invalid');
+    company.classList.remove('invalid');
+
+    const sidVal = sid.value.trim();
+    if (!/^[0-9]{4,8}$/.test(sidVal)) {
+        sidErr.style.display = 'block';
+        sid.classList.add('invalid');
+        valid = false;
+    }
+    if (company.value.trim().length < 3) {
+        coErr.style.display = 'block';
+        company.classList.add('invalid');
+        valid = false;
+    }
+    if (!valid) e.preventDefault();
+    return valid;
+}
+</script>
+
+</body>
+</html>

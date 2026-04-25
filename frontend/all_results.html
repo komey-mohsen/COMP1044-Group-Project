@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Results</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+        }
+
+        header {
+            background: #1f4e79;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header h2 { margin: 0; font-size: 22px; }
+
+        .logout-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover { background: rgba(255,255,255,0.15); }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        /* ── Toolbar ── */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 220px;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+        }
+
+        .result-count {
+            font-size: 14px;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        /* ── Card / Table ── */
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        thead th {
+            background: #1f4e79;
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        tbody tr:nth-child(even) { background: #f8f9fb; }
+        tbody tr:hover           { background: #eef2f7; }
+
+        tbody td {
+            padding: 11px 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .score-cell { font-weight: bold; }
+
+        .score-high   { color: #15803d; }
+        .score-mid    { color: #b45309; }
+        .score-low    { color: #dc2626; }
+
+        .empty-cell, .error-cell {
+            text-align: center;
+            padding: 32px;
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        .error-cell { color: #dc2626; }
+
+        /* ── Back link ── */
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .back-link:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>All Student Results</h2>
+    <a href="index.html" class="logout-btn">&#x2192; Logout</a>
+</header>
+
+<div class="container">
+
+    <div class="toolbar">
+        <input
+            type="text"
+            id="search"
+            class="search-box"
+            placeholder="Search by student name or ID…"
+            oninput="filterTable()"
+        >
+        <span class="result-count" id="result-count"></span>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Company</th>
+                    <th>Final Score</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr>
+                    <td colspan="4" class="empty-cell">Loading results&hellip;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a class="back-link" href="admin_dashboard.html">&#8592; Back to Dashboard</a>
+</div>
+
+<script>
+var allRows = [];
+
+fetch('../backend/results/get_all_results.php')
+    .then(function(res) {
+        if (!res.ok) throw new Error('Server returned ' + res.status);
+        return res.json();
+    })
+    .then(function(data) {
+        allRows = data;
+        renderTable(allRows);
+    })
+    .catch(function(err) {
+        document.getElementById('table-body').innerHTML =
+            '<tr><td colspan="4" class="error-cell">Could not load results: ' + escHtml(err.message) + '</td></tr>';
+        document.getElementById('result-count').textContent = '';
+    });
+
+function renderTable(rows) {
+    var tbody = document.getElementById('table-body');
+    var count = document.getElementById('result-count');
+
+    if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="4" class="empty-cell">No results found.</td></tr>';
+        count.textContent = '';
+        return;
+    }
+
+    count.textContent = rows.length + ' record' + (rows.length !== 1 ? 's' : '');
+
+    tbody.innerHTML = rows.map(function(r) {
+        var score    = parseFloat(r.final_score);
+        var scoreStr = isNaN(score) ? '—' : score.toFixed(2);
+        var cls      = score >= 70 ? 'score-high' : score >= 50 ? 'score-mid' : 'score-low';
+
+        return '<tr>' +
+            '<td>' + escHtml(r.student_id)   + '</td>' +
+            '<td>' + escHtml(r.student_name) + '</td>' +
+            '<td>' + escHtml(r.company_name) + '</td>' +
+            '<td class="score-cell ' + cls + '">' + scoreStr + ' / 100</td>' +
+        '</tr>';
+    }).join('');
+}
+
+function filterTable() {
+    var term = document.getElementById('search').value.trim().toLowerCase();
+
+    if (!term) {
+        renderTable(allRows);
+        return;
+    }
+
+    var filtered = allRows.filter(function(r) {
+        return r.student_name.toLowerCase().includes(term) ||
+               String(r.student_id).includes(term);
+    });
+
+    renderTable(filtered);
+}
+
+function escHtml(str) {
+    return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+</script>
+
+</body>
+</html>

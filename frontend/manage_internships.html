@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Internships</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+        }
+
+        header {
+            background: #1f4e79;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header h2 { margin: 0; font-size: 22px; }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .card-title {
+            margin: 0 0 20px;
+            font-size: 18px;
+            color: #1f4e79;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        thead th {
+            background: #1f4e79;
+            color: white;
+            padding: 12px 14px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        tbody tr:nth-child(even) { background: #f8f9fb; }
+
+        tbody tr:hover { background: #eef2f7; }
+
+        tbody td {
+            padding: 11px 14px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: middle;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .badge.unassigned {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        /* Action buttons inside table */
+        .btn-edit, .btn-delete {
+            display: inline-block;
+            padding: 6px 14px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 6px;
+        }
+
+        .btn-edit   { background: #007bff; color: white; }
+        .btn-edit:hover   { background: #0056b3; }
+        .btn-delete { background: #dc3545; color: white; }
+        .btn-delete:hover { background: #b91c1c; }
+
+        /* Page-level link buttons */
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .back-link:hover { background: #0056b3; }
+
+        .empty-cell, .error-cell {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        .error-cell { color: #dc2626; }
+
+        /* ── Edit Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-card {
+            background: white;
+            border-radius: 10px;
+            padding: 32px 36px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            margin: 20px;
+        }
+
+        .modal-card h3 {
+            margin: 0 0 22px;
+            font-size: 20px;
+            color: #1f4e79;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        .modal-card label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .modal-card input,
+        .modal-card select {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 18px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .modal-card input:focus,
+        .modal-card select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+
+        .btn-save {
+            padding: 10px 22px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-save:hover { background: #0056b3; }
+
+        .btn-cancel {
+            padding: 10px 18px;
+            background: #e5e7eb;
+            color: #374151;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .btn-cancel:hover { background: #d1d5db; }
+
+        /* Hidden delete form */
+        #delete-form { display: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>Manage Internships</h2>
+</header>
+
+<div class="container">
+    <div class="card">
+        <p class="card-title">All Internship Records</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Student</th>
+                    <th>Company</th>
+                    <th>Assessor</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr>
+                    <td colspan="5" class="empty-cell">Loading internships&hellip;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a class="back-link" href="admin_dashboard.html">&#8592; Back to Dashboard</a>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="edit-modal">
+    <div class="modal-card">
+        <h3>Edit Internship</h3>
+        <form action="../backend/internship/update_internship.php" method="POST">
+            <input type="hidden" name="internship_id" id="edit-id">
+
+            <label for="edit-company">Company Name</label>
+            <input type="text" id="edit-company" name="company_name"
+                   required minlength="3" placeholder="Enter company name">
+
+            <label for="edit-assessor">Assessor</label>
+            <select id="edit-assessor" name="assessor_id">
+                <option value="">— Unassigned —</option>
+            </select>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn-save">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Hidden delete form -->
+<form id="delete-form" action="../backend/internship/delete_internship.php" method="POST">
+    <input type="hidden" name="internship_id" id="delete-id">
+</form>
+
+<script>
+let assessorOptions = '';
+
+// Load internships and assessors from the API
+fetch('../backend/internship/get_internships.php')
+    .then(function(res) {
+        if (!res.ok) throw new Error('Server returned ' + res.status);
+        return res.json();
+    })
+    .then(function(data) {
+        buildAssessorOptions(data.assessors || []);
+        renderTable(data.internships || []);
+    })
+    .catch(function(err) {
+        document.getElementById('table-body').innerHTML =
+            '<tr><td colspan="5" class="error-cell">Could not load data: ' + escHtml(err.message) + '</td></tr>';
+    });
+
+function buildAssessorOptions(assessors) {
+    assessorOptions = assessors
+        .map(function(a) {
+            return '<option value="' + a.user_id + '">' + escHtml(a.username) + '</option>';
+        })
+        .join('');
+    document.getElementById('edit-assessor').innerHTML =
+        '<option value="">— Unassigned —</option>' + assessorOptions;
+}
+
+function renderTable(rows) {
+    var tbody = document.getElementById('table-body');
+
+    if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-cell">No internships found.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = rows.map(function(r) {
+        var assessorBadge = r.assessor_name === 'Unassigned'
+            ? '<span class="badge unassigned">Unassigned</span>'
+            : '<span class="badge">' + escHtml(r.assessor_name) + '</span>';
+
+        return '<tr>' +
+            '<td>' + escHtml(r.internship_id) + '</td>' +
+            '<td>' + escHtml(r.student_name)  + '</td>' +
+            '<td>' + escHtml(r.company_name)  + '</td>' +
+            '<td>' + assessorBadge            + '</td>' +
+            '<td>' +
+                '<button class="btn-edit" ' +
+                    'data-id="'       + escHtml(r.internship_id) + '" ' +
+                    'data-company="'  + escHtml(r.company_name)  + '" ' +
+                    'data-assessor="' + escHtml(r.assessor_id || '') + '">' +
+                    'Edit' +
+                '</button>' +
+                '<button class="btn-delete" data-id="' + escHtml(r.internship_id) + '">' +
+                    'Delete' +
+                '</button>' +
+            '</td>' +
+        '</tr>';
+    }).join('');
+
+    // Attach listeners after rendering
+    document.querySelectorAll('.btn-edit').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            openEditModal(this.dataset.id, this.dataset.company, this.dataset.assessor);
+        });
+    });
+
+    document.querySelectorAll('.btn-delete').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            handleDelete(this.dataset.id);
+        });
+    });
+}
+
+function openEditModal(id, company, assessorId) {
+    document.getElementById('edit-id').value      = id;
+    document.getElementById('edit-company').value = company;
+
+    // Rebuild options so the select reflects the current assessor
+    document.getElementById('edit-assessor').innerHTML =
+        '<option value="">— Unassigned —</option>' + assessorOptions;
+    document.getElementById('edit-assessor').value = assessorId || '';
+
+    document.getElementById('edit-modal').classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('edit-modal').classList.remove('active');
+}
+
+function handleDelete(id) {
+    if (confirm('Delete internship #' + id + '?\nAll linked assessments will also be removed. This cannot be undone.')) {
+        document.getElementById('delete-id').value = id;
+        document.getElementById('delete-form').submit();
+    }
+}
+
+// Close modal when clicking outside the card
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+function escHtml(str) {
+    return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+</script>
+
+</body>
+</html>

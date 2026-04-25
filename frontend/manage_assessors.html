@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Assessors</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+        }
+
+        header {
+            background: #1f4e79;
+            color: white;
+            padding: 15px 30px;
+        }
+
+        header h2 { margin: 0; font-size: 22px; }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .card-title {
+            margin: 0 0 20px;
+            font-size: 18px;
+            color: #1f4e79;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        /* ── Table ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        thead th {
+            background: #1f4e79;
+            color: white;
+            padding: 12px 14px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        tbody tr:nth-child(even) { background: #f8f9fb; }
+        tbody tr:hover           { background: #eef2f7; }
+
+        tbody td {
+            padding: 11px 14px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: middle;
+        }
+
+        .role-badge {
+            display: inline-block;
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: #e0e7ff;
+            color: #3730a3;
+            font-weight: bold;
+        }
+
+        .empty-cell, .error-cell {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        .error-cell { color: #dc2626; }
+
+        /* ── Buttons ── */
+        .btn-delete {
+            padding: 6px 14px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover { background: #b91c1c; }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 10px 18px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .back-link:hover { background: #0056b3; }
+
+        /* ── Add Assessor Form ── */
+        .form-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+        }
+
+        .form-group input.invalid {
+            border-color: #dc2626;
+        }
+
+        .field-hint {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .field-error {
+            font-size: 12px;
+            color: #dc2626;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .btn-add {
+            padding: 10px 24px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            height: 42px;
+        }
+
+        .btn-add:hover { background: #0056b3; }
+
+        /* Hidden delete form */
+        #delete-form { display: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>Manage Assessors</h2>
+</header>
+
+<div class="container">
+
+    <!-- ── Assessors Table ── -->
+    <div class="card">
+        <p class="card-title">Existing Assessor Accounts</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr>
+                    <td colspan="4" class="empty-cell">Loading assessors&hellip;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ── Add Assessor Form ── -->
+    <div class="card">
+        <p class="card-title">Add New Assessor</p>
+        <form action="../backend/auth/add_assessor.php" method="POST"
+              onsubmit="return validateAddForm(event)">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username"
+                           placeholder="e.g. assessor2"
+                           required minlength="4">
+                    <div class="field-hint">Minimum 4 characters</div>
+                    <div class="field-error" id="err-username">Username must be at least 4 characters.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password"
+                           placeholder="Min. 6 characters"
+                           required minlength="6">
+                    <div class="field-hint">Minimum 6 characters</div>
+                    <div class="field-error" id="err-password">Password must be at least 6 characters.</div>
+                </div>
+
+                <button type="submit" class="btn-add">Add Assessor</button>
+            </div>
+        </form>
+    </div>
+
+    <a class="back-link" href="admin_dashboard.html">&#8592; Back to Dashboard</a>
+</div>
+
+<!-- Hidden delete form -->
+<form id="delete-form" action="../backend/auth/delete_assessor.php" method="POST">
+    <input type="hidden" name="user_id" id="delete-uid">
+</form>
+
+<script>
+// Load assessors on page load
+fetch('../backend/auth/get_assessors.php')
+    .then(function(res) {
+        if (!res.ok) throw new Error('Server returned ' + res.status);
+        return res.json();
+    })
+    .then(function(data) {
+        renderTable(data);
+    })
+    .catch(function(err) {
+        document.getElementById('table-body').innerHTML =
+            '<tr><td colspan="4" class="error-cell">Could not load assessors: ' + escHtml(err.message) + '</td></tr>';
+    });
+
+function renderTable(rows) {
+    var tbody = document.getElementById('table-body');
+
+    if (!rows || rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="empty-cell">No assessor accounts found.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = rows.map(function(r) {
+        return '<tr>' +
+            '<td>' + escHtml(r.user_id)  + '</td>' +
+            '<td>' + escHtml(r.username) + '</td>' +
+            '<td><span class="role-badge">' + escHtml(r.role) + '</span></td>' +
+            '<td>' +
+                '<button class="btn-delete" data-id="' + escHtml(r.user_id) + '" ' +
+                        'data-name="' + escHtml(r.username) + '">' +
+                    'Delete' +
+                '</button>' +
+            '</td>' +
+        '</tr>';
+    }).join('');
+
+    document.querySelectorAll('.btn-delete').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            handleDelete(this.dataset.id, this.dataset.name);
+        });
+    });
+}
+
+function handleDelete(id, name) {
+    if (confirm('Delete assessor "' + name + '" (ID ' + id + ')?\n\nThis cannot be undone.')) {
+        document.getElementById('delete-uid').value = id;
+        document.getElementById('delete-form').submit();
+    }
+}
+
+function validateAddForm(e) {
+    var valid    = true;
+    var username = document.getElementById('username');
+    var password = document.getElementById('password');
+    var errU     = document.getElementById('err-username');
+    var errP     = document.getElementById('err-password');
+
+    errU.style.display = 'none';
+    errP.style.display = 'none';
+    username.classList.remove('invalid');
+    password.classList.remove('invalid');
+
+    if (username.value.trim().length < 4) {
+        errU.style.display = 'block';
+        username.classList.add('invalid');
+        valid = false;
+    }
+    if (password.value.length < 6) {
+        errP.style.display = 'block';
+        password.classList.add('invalid');
+        valid = false;
+    }
+
+    if (!valid) e.preventDefault();
+    return valid;
+}
+
+function escHtml(str) {
+    return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+</script>
+
+</body>
+</html>

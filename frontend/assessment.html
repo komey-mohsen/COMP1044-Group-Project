@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Form</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #91a4d2, #c3b6e8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 850px;
+            background: #f8f8fb;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 34px;
+            color: #111827;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 22px;
+            border: 1px solid #c7cedb;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #4f6fd8;
+            box-shadow: 0 0 0 3px rgba(79, 111, 216, 0.15);
+        }
+
+        button {
+            background: linear-gradient(135deg, #4e73df, #3d5fcb);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 34px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.95;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #3559c7;
+        }
+
+        input.invalid, textarea.invalid, select.invalid {
+            border-color: #dc2626;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 22px;
+            border: 1px solid #c7cedb;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #4f6fd8;
+            box-shadow: 0 0 0 3px rgba(79, 111, 216, 0.15);
+        }
+
+        .error-msg {
+            color: #dc2626;
+            font-size: 12px;
+            margin: -16px 0 16px;
+            display: none;
+        }
+
+        .field-hint {
+            font-size: 12px;
+            color: #9ca3af;
+            margin: -16px 0 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Assessment Form</h2>
+
+        <form action="../backend/assessment/submit_marks.php" method="POST" onsubmit="return validateAssessment(event)">
+            <label for="internship_id">Internship</label>
+            <select id="internship_id" name="internship_id" required>
+                <option value="">— Loading internships… —</option>
+            </select>
+            <div class="error-msg" id="err-internship_id">Please select an internship.</div>
+
+            <label for="undertaking_tasks">Undertaking Tasks/Projects (10%)</label>
+            <input type="number" id="undertaking_tasks" name="undertaking_tasks" min="0" max="100" step="0.01" required placeholder="0 – 100">
+            <div class="error-msg" id="err-undertaking_tasks">Score must be between 0 and 100.</div>
+
+            <label for="health_safety">Health and Safety Requirements (10%)</label>
+            <input type="number" id="health_safety" name="health_safety" min="0" max="100" step="0.01" required placeholder="0 – 100">
+            <div class="error-msg" id="err-health_safety">Score must be between 0 and 100.</div>
+
+            <label for="theoretical_knowledge">Connectivity and Use of Theoretical Knowledge (10%)</label>
+            <input type="number" id="theoretical_knowledge" name="theoretical_knowledge" min="0" max="100" step="0.01" required placeholder="0 – 100">
+            <div class="error-msg" id="err-theoretical_knowledge">Score must be between 0 and 100.</div>
+
+            <label for="written_report">Presentation of Report as Written Document (15%)</label>
+            <input type="number" id="written_report" name="written_report" min="0" max="100" step="0.01" required placeholder="0 – 100">
+            <div class="error-msg" id="err-written_report">Score must be between 0 and 100.</div>
+
+            <label for="language_illustration">Clarity of Language and Illustration (10%)</label>
+            <input type="number" id="language_illustration" name="language_illustration" min="0" max="100" step="0.01" required placeholder="0 – 100">
+            <div class="error-msg" id="err-language_illustration">Score must be between 0 and 100.</div>
+
+            <label for="lifelong_learning">Lifelong Learning Activities (15%)</label>
+            <input type="number" id="lifelong_learning" name="lifelong_learning" min="0" max="100" step="0.01" required placeholder="0 – 100">
+            <div class="error-msg" id="err-lifelong_learning">Score must be between 0 and 100.</div>
+
+            <label for="project_management">Project Management (15%)</label>
+            <input type="number" id="project_management" name="project_management" min="0" max="100" step="0.01" required placeholder="0 – 100">
+            <div class="error-msg" id="err-project_management">Score must be between 0 and 100.</div>
+
+            <label for="time_management">Time Management (15%)</label>
+            <input type="number" id="time_management" name="time_management" min="0" max="100" step="0.01" required placeholder="0 – 100">
+            <div class="error-msg" id="err-time_management">Score must be between 0 and 100.</div>
+
+            <label for="comments">Comments <span style="font-size:13px;color:#6b7280;">(minimum 10 characters)</span></label>
+            <textarea id="comments" name="comments" rows="4" required minlength="10" placeholder="Enter your comments (at least 10 characters)..."></textarea>
+            <div class="error-msg" id="err-comments">Comments must be at least 10 characters.</div>
+
+            <button type="submit">Submit Assessment</button>
+        </form>
+
+        <a href="assessor_dashboard.html" class="back-link">Back to Dashboard</a>
+    </div>
+
+<script>
+// Populate internship dropdown on page load
+fetch('../backend/assessment/get_internships.php')
+    .then(function(res) { return res.json(); })
+    .then(function(rows) {
+        var sel = document.getElementById('internship_id');
+        if (!rows.length) {
+            sel.innerHTML = '<option value="">— No internships found —</option>';
+            return;
+        }
+        sel.innerHTML = '<option value="">— Select an internship —</option>' +
+            rows.map(function(r) {
+                return '<option value="' + r.internship_id + '">' +
+                    r.student_name + ' — ' + r.company_name +
+                '</option>';
+            }).join('');
+    })
+    .catch(function() {
+        document.getElementById('internship_id').innerHTML =
+            '<option value="">— Could not load internships —</option>';
+    });
+
+function validateAssessment(e) {
+    let valid = true;
+
+    var sel    = document.getElementById('internship_id');
+    var selErr = document.getElementById('err-internship_id');
+    sel.classList.remove('invalid');
+    selErr.style.display = 'none';
+    if (!sel.value) {
+        sel.classList.add('invalid');
+        selErr.style.display = 'block';
+        valid = false;
+    }
+
+    const scoreFields = [
+        'undertaking_tasks', 'health_safety', 'theoretical_knowledge',
+        'written_report', 'language_illustration', 'lifelong_learning',
+        'project_management', 'time_management'
+    ];
+
+    scoreFields.forEach(function(name) {
+        const input = document.getElementById(name);
+        const errEl = document.getElementById('err-' + name);
+        const val   = parseFloat(input.value);
+        input.classList.remove('invalid');
+        errEl.style.display = 'none';
+        if (input.value === '' || isNaN(val) || val < 0 || val > 100) {
+            input.classList.add('invalid');
+            errEl.style.display = 'block';
+            valid = false;
+        }
+    });
+
+    const comments = document.getElementById('comments');
+    const commErr  = document.getElementById('err-comments');
+    comments.classList.remove('invalid');
+    commErr.style.display = 'none';
+    if (comments.value.trim().length < 10) {
+        comments.classList.add('invalid');
+        commErr.style.display = 'block';
+        valid = false;
+    }
+
+    if (!valid) e.preventDefault();
+    return valid;
+}
+</script>
+
+</body>
+</html>
