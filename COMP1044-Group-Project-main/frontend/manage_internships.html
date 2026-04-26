@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Internships</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+            min-height: 100vh;
+            font-size: 16px;
+        }
+
+        header {
+            background: #1e3a5f;
+            padding: 0 32px;
+            height: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title { color: white; font-size: 20px; font-weight: 700; }
+
+        .logout-btn {
+            background: transparent;
+            border: 1.5px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover { background: rgba(255,255,255,0.12); border-color: white; }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 36px auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 15px; }
+
+        thead th {
+            background: #1e3a5f;
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        thead th:first-child { border-radius: 8px 0 0 0; }
+        thead th:last-child  { border-radius: 0 8px 0 0; }
+
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        tbody tr:hover { background: #eff6ff; }
+
+        tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            font-size: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .badge.unassigned { background: #f8fafc; color: #94a3b8; }
+
+        .btn-edit, .btn-delete {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            margin-right: 6px;
+        }
+
+        .btn-edit   { background: #2563eb; color: white; }
+        .btn-edit:hover   { background: #1d4ed8; transform: translateY(-1px); }
+        .btn-delete { background: #dc2626; color: white; }
+        .btn-delete:hover { background: #b91c1c; transform: translateY(-1px); }
+
+        .empty-cell, .error-cell { text-align: center; padding: 44px; color: #94a3b8; font-size: 16px; }
+        .error-cell { color: #dc2626; }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 22px;
+            padding: 11px 22px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .back-link:hover { background: #1d4ed8; }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.5);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-card {
+            background: white;
+            border-radius: 16px;
+            padding: 36px 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+
+        .modal-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .modal-card label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .modal-card input,
+        .modal-card select {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            color: #0f172a;
+            outline: none;
+            margin-bottom: 20px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .modal-card input:focus,
+        .modal-card select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        }
+
+        .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+
+        .btn-save {
+            padding: 11px 26px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-save:hover { background: #1d4ed8; }
+
+        .btn-cancel {
+            padding: 11px 22px;
+            background: #f1f5f9;
+            color: #374151;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-cancel:hover { background: #e2e8f0; }
+
+        #delete-form { display: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-title">🏢 Manage Internships</div>
+    <a href="index.html" class="logout-btn">→ Logout</a>
+</header>
+
+<div class="container">
+    <div class="card">
+        <p class="card-title">🗂️ All Internship Records</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Student</th>
+                    <th>Company</th>
+                    <th>Assessor</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr><td colspan="5" class="empty-cell">Loading internships…</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a class="back-link" href="admin_dashboard.html">← Back to Dashboard</a>
+</div>
+
+<div class="modal-overlay" id="edit-modal">
+    <div class="modal-card">
+        <h3>✏️ Edit Internship</h3>
+        <form action="../backend/internship/update_internship.php" method="POST">
+            <input type="hidden" name="internship_id" id="edit-id">
+            <label for="edit-company">Company Name</label>
+            <input type="text" id="edit-company" name="company_name" required minlength="3" placeholder="Enter company name">
+            <label for="edit-assessor">Assessor</label>
+            <select id="edit-assessor" name="assessor_id">
+                <option value="">— Unassigned —</option>
+            </select>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn-save">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<form id="delete-form" action="../backend/internship/delete_internship.php" method="POST">
+    <input type="hidden" name="internship_id" id="delete-id">
+</form>
+
+<script>
+let assessorOptions = '';
+
+fetch('../backend/internship/get_internships.php')
+    .then(function(res) { if (!res.ok) throw new Error('Server returned ' + res.status); return res.json(); })
+    .then(function(data) { buildAssessorOptions(data.assessors || []); renderTable(data.internships || []); })
+    .catch(function(err) {
+        document.getElementById('table-body').innerHTML =
+            '<tr><td colspan="5" class="error-cell">Could not load data: ' + escHtml(err.message) + '</td></tr>';
+    });
+
+function buildAssessorOptions(assessors) {
+    assessorOptions = assessors.map(function(a) {
+        return '<option value="' + a.user_id + '">' + escHtml(a.username) + '</option>';
+    }).join('');
+    document.getElementById('edit-assessor').innerHTML = '<option value="">— Unassigned —</option>' + assessorOptions;
+}
+
+function renderTable(rows) {
+    var tbody = document.getElementById('table-body');
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty-cell">No internships found.</td></tr>'; return; }
+    tbody.innerHTML = rows.map(function(r) {
+        var badge = r.assessor_name === 'Unassigned'
+            ? '<span class="badge unassigned">Unassigned</span>'
+            : '<span class="badge">' + escHtml(r.assessor_name) + '</span>';
+        return '<tr>' +
+            '<td>' + escHtml(r.internship_id) + '</td><td>' + escHtml(r.student_name) + '</td>' +
+            '<td>' + escHtml(r.company_name)  + '</td><td>' + badge + '</td>' +
+            '<td><button class="btn-edit" data-id="' + escHtml(r.internship_id) +
+                '" data-company="' + escHtml(r.company_name) + '" data-assessor="' + escHtml(r.assessor_id || '') + '">Edit</button>' +
+                '<button class="btn-delete" data-id="' + escHtml(r.internship_id) + '">Delete</button></td></tr>';
+    }).join('');
+    document.querySelectorAll('.btn-edit').forEach(function(btn) {
+        btn.addEventListener('click', function() { openEditModal(this.dataset.id, this.dataset.company, this.dataset.assessor); });
+    });
+    document.querySelectorAll('.btn-delete').forEach(function(btn) {
+        btn.addEventListener('click', function() { handleDelete(this.dataset.id); });
+    });
+}
+
+function openEditModal(id, company, assessorId) {
+    document.getElementById('edit-id').value      = id;
+    document.getElementById('edit-company').value = company;
+    document.getElementById('edit-assessor').innerHTML = '<option value="">— Unassigned —</option>' + assessorOptions;
+    document.getElementById('edit-assessor').value = assessorId || '';
+    document.getElementById('edit-modal').classList.add('active');
+}
+
+function closeModal() { document.getElementById('edit-modal').classList.remove('active'); }
+
+function handleDelete(id) {
+    if (confirm('Delete internship #' + id + '?\nAll linked assessments will also be removed.')) {
+        document.getElementById('delete-id').value = id;
+        document.getElementById('delete-form').submit();
+    }
+}
+
+document.getElementById('edit-modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+function escHtml(str) {
+    return String(str == null ? '' : str)
+        .replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login – Internship System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            border-radius: 16px;
+            padding: 48px 44px 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .logo-icon {
+            width: 58px;
+            height: 58px;
+            background: #2563eb;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 14px;
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 7px;
+        }
+
+        .field { margin-bottom: 6px; }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            color: #0f172a;
+            background: white;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        }
+
+        input.invalid { border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+
+        .field-hint { font-size: 13px; color: #94a3b8; margin: 5px 0 18px; }
+
+        .error-msg { font-size: 14px; color: #dc2626; margin: 4px 0 16px; display: none; }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-login:hover { background: #1d4ed8; transform: translateY(-1px); }
+
+        .hint-box {
+            margin-top: 28px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 16px 18px;
+        }
+
+        .hint-box .hint-title {
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .hint-row { font-size: 14px; color: #1e40af; margin: 5px 0; }
+        .hint-row span { font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="logo">
+        <div class="logo-icon">🎓</div>
+        <h1>Internship System</h1>
+        <p class="subtitle">Sign in to your account</p>
+    </div>
+
+    <form action="../backend/auth/login.php" method="POST" onsubmit="return validateLogin(event)">
+        <div class="field">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required minlength="4">
+            <div class="field-hint">Minimum 4 characters</div>
+            <div class="error-msg" id="username-error">Username must be at least 4 characters.</div>
+        </div>
+
+        <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required minlength="6">
+            <div class="field-hint">Minimum 6 characters</div>
+            <div class="error-msg" id="password-error">Password must be at least 6 characters.</div>
+        </div>
+
+        <button type="submit" class="btn-login">Sign In</button>
+    </form>
+
+    <div class="hint-box">
+        <div class="hint-title">🔑 Test Credentials</div>
+        <div class="hint-row">Admin &nbsp;&nbsp;&nbsp;: <span>admin</span> / <span>admin123</span></div>
+        <div class="hint-row">Assessor : <span>assessor1</span> / <span>pass123</span></div>
+    </div>
+</div>
+
+<script>
+function validateLogin(e) {
+    let valid = true;
+    const username = document.getElementById('username');
+    const password = document.getElementById('password');
+    const userErr  = document.getElementById('username-error');
+    const passErr  = document.getElementById('password-error');
+
+    userErr.style.display = 'none'; passErr.style.display = 'none';
+    username.classList.remove('invalid'); password.classList.remove('invalid');
+
+    if (username.value.trim().length < 4) {
+        userErr.style.display = 'block'; username.classList.add('invalid'); valid = false;
+    }
+    if (password.value.length < 6) {
+        passErr.style.display = 'block'; password.classList.add('invalid'); valid = false;
+    }
+    if (!valid) e.preventDefault();
+    return valid;
+}
+</script>
+
+</body>
+</html>
