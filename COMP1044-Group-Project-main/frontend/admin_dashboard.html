@@ -69,6 +69,37 @@
             font-weight: 500;
         }
 
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+            border-top: 4px solid #2563eb;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: #0f172a;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
         .section-card {
             background: white;
             border-radius: 12px;
@@ -128,9 +159,37 @@
 <div class="container">
     <p class="page-subtitle">Welcome back, Admin. Manage the internship system below.</p>
 
+    <div class="stats-grid" aria-label="System summary">
+        <div class="stat-card">
+            <div class="stat-label">Students</div>
+            <div class="stat-value" id="stat-students">--</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Internships</div>
+            <div class="stat-value" id="stat-internships">--</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Assessors</div>
+            <div class="stat-value" id="stat-assessors">--</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Completed</div>
+            <div class="stat-value" id="stat-assessments">--</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Pending</div>
+            <div class="stat-value" id="stat-pending">--</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Avg. Score</div>
+            <div class="stat-value" id="stat-average">--</div>
+        </div>
+    </div>
+
     <div class="section-card">
         <h3><span class="icon">👤</span> Student Management</h3>
         <a href="add_student.html" class="btn-nav">Add Student</a>
+        <a href="manage_students.html" class="btn-nav">Manage Students</a>
         <a href="update_student.html" class="btn-nav">Update Student</a>
         <a href="delete_student.html" class="btn-nav danger">Delete Student</a>
     </div>
@@ -150,8 +209,30 @@
         <h3><span class="icon">📊</span> Results</h3>
         <a href="results.html" class="btn-nav">View Results</a>
         <a href="all_results.html" class="btn-nav">View All Results</a>
+        <a href="reports.html" class="btn-nav">Reports</a>
     </div>
 </div>
+
+<script>
+fetch('../backend/admin/get_dashboard_stats.php')
+    .then(function(res) { if (!res.ok) throw new Error('Server returned ' + res.status); return res.json(); })
+    .then(function(stats) {
+        setStat('stat-students', stats.students);
+        setStat('stat-internships', stats.internships);
+        setStat('stat-assessors', stats.assessors);
+        setStat('stat-assessments', stats.assessments);
+        setStat('stat-pending', stats.pending_assessments);
+        document.getElementById('stat-average').textContent =
+            stats.average_score === null ? '--' : Number(stats.average_score).toFixed(1);
+    })
+    .catch(function() {
+        document.querySelectorAll('.stat-value').forEach(function(el) { el.textContent = '--'; });
+    });
+
+function setStat(id, value) {
+    document.getElementById(id).textContent = Number(value || 0).toLocaleString();
+}
+</script>
 
 </body>
 </html>
