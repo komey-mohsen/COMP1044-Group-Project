@@ -4,76 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assessor Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f3f5f8;
-            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+            min-height: 100vh;
+            font-size: 16px;
         }
+
         header {
-            background: #2e7d32;
-            color: white;
-            padding: 15px 30px;
+            background: #1e3a5f;
+            padding: 0 32px;
+            height: 66px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        header h2 { margin: 0; }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .header-title span { font-size: 24px; }
+
         .logout-btn {
             background: transparent;
-            border: 2px solid white;
+            border: 1.5px solid rgba(255,255,255,0.5);
             color: white;
             padding: 8px 18px;
-            border-radius: 6px;
+            border-radius: 10px;
             text-decoration: none;
             font-size: 14px;
-            font-weight: bold;
-            margin: 0;
+            font-weight: 500;
+            font-family: inherit;
+            transition: background 0.2s, border-color 0.2s;
         }
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
+
+        .logout-btn:hover { background: rgba(255,255,255,0.12); border-color: white; }
+
         .container {
-            width: 80%;
-            margin: 30px auto;
+            width: 88%;
+            max-width: 760px;
+            margin: 40px auto;
         }
-        .card {
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 28px;
+            font-weight: 500;
+        }
+
+        .section-card {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+            border-left: 4px solid #2563eb;
+            transition: transform 0.18s, box-shadow 0.18s;
         }
-        a {
+
+        .section-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.07);
+        }
+
+        .section-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-card h3 .icon { font-size: 22px; }
+
+        .section-card p {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 18px;
+        }
+
+        .btn-nav {
             display: inline-block;
-            margin-top: 12px;
-            text-decoration: none;
+            margin: 5px 10px 5px 0;
+            padding: 12px 24px;
+            background: #2563eb;
             color: white;
-            background: #28a745;
-            padding: 10px 15px;
-            border-radius: 6px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: background 0.2s, transform 0.15s;
         }
-        a:hover {
-            background: #1f7a34;
-        }
+
+        .btn-nav:hover { background: #1d4ed8; transform: translateY(-1px); }
     </style>
 </head>
 <body>
-    <header>
-        <h2>Assessor Dashboard</h2>
-        <a href="index.html" class="logout-btn">&#x2192; Logout</a>
-    </header>
 
-    <div class="container">
-        <div class="card">
-            <h3>Assessment</h3>
-            <p>Enter student marks and comments based on the official criteria.</p>
-            <a href="assessment.html">Open Assessment Form</a>
-        </div>
-
-        <div class="card">
-            <h3>Results</h3>
-            <a href="results.html">View Assessed Results</a>
-        </div>
+<header>
+    <div class="header-title">
+        <span>🧑‍🏫</span> Assessor Dashboard
     </div>
+    <a href="index.html" class="logout-btn">→ Logout</a>
+</header>
+
+<div class="container">
+    <p class="page-subtitle">Welcome back. Use the options below to manage assessments and view results.</p>
+
+    <div class="section-card">
+        <h3><span class="icon">📝</span> Assessment</h3>
+        <p>Enter student marks and comments based on the official assessment criteria.</p>
+        <a href="assessment.html" class="btn-nav">Open Assessment Form</a>
+    </div>
+
+    <div class="section-card">
+        <h3><span class="icon">📋</span> Results</h3>
+        <p>Look up an assessed student's final result by their student ID.</p>
+        <a href="results.html" class="btn-nav">View Results</a>
+    </div>
+</div>
+
 </body>
 </html>

@@ -4,119 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Assessors</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+            min-height: 100vh;
+            font-size: 16px;
         }
 
         header {
-            background: #1f4e79;
-            color: white;
-            padding: 15px 30px;
+            background: #1e3a5f;
+            padding: 0 32px;
+            height: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        header h2 { margin: 0; font-size: 22px; }
+        .header-title { color: white; font-size: 20px; font-weight: 700; }
+
+        .logout-btn {
+            background: transparent;
+            border: 1.5px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover { background: rgba(255,255,255,0.12); border-color: white; }
 
         .container {
-            width: 90%;
+            width: 92%;
             max-width: 900px;
-            margin: 30px auto;
+            margin: 36px auto;
         }
 
-        /* ── Cards ── */
         .card {
             background: white;
-            padding: 24px;
-            border-radius: 10px;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 24px;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 22px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
             overflow-x: auto;
         }
 
         .card-title {
-            margin: 0 0 20px;
             font-size: 18px;
-            color: #1f4e79;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 10px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #f1f5f9;
         }
 
-        /* ── Table ── */
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        table { width: 100%; border-collapse: collapse; font-size: 15px; }
+
+        thead th {
+            background: #1e3a5f;
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
             font-size: 15px;
         }
 
-        thead th {
-            background: #1f4e79;
-            color: white;
-            padding: 12px 14px;
-            text-align: left;
-            white-space: nowrap;
-        }
+        thead th:first-child { border-radius: 8px 0 0 0; }
+        thead th:last-child  { border-radius: 0 8px 0 0; }
 
-        tbody tr:nth-child(even) { background: #f8f9fb; }
-        tbody tr:hover           { background: #eef2f7; }
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        tbody tr:hover { background: #eff6ff; }
 
         tbody td {
-            padding: 11px 14px;
-            border-bottom: 1px solid #e5e7eb;
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
             vertical-align: middle;
+            font-size: 15px;
         }
 
         .role-badge {
             display: inline-block;
-            font-size: 12px;
-            padding: 3px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 12px;
             border-radius: 20px;
-            background: #e0e7ff;
-            color: #3730a3;
-            font-weight: bold;
+            background: #eff6ff;
+            color: #2563eb;
         }
 
-        .empty-cell, .error-cell {
-            text-align: center;
-            padding: 30px;
-            color: #6b7280;
-            font-size: 15px;
-        }
-
+        .empty-cell, .error-cell { text-align: center; padding: 44px; color: #94a3b8; font-size: 16px; }
         .error-cell { color: #dc2626; }
 
-        /* ── Buttons ── */
         .btn-delete {
-            padding: 6px 14px;
-            background: #dc3545;
+            padding: 8px 16px;
+            background: #dc2626;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-delete:hover { background: #b91c1c; }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 4px;
-            padding: 10px 18px;
-            background: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
         }
 
-        .back-link:hover { background: #0056b3; }
+        .btn-delete:hover { background: #b91c1c; transform: translateY(-1px); }
 
-        /* ── Add Assessor Form ── */
+        /* Add form */
         .form-row {
             display: flex;
             gap: 16px;
@@ -124,81 +131,88 @@
             align-items: flex-end;
         }
 
-        .form-group {
-            flex: 1;
-            min-width: 160px;
-        }
+        .form-group { flex: 1; min-width: 180px; }
 
         .form-group label {
             display: block;
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 600;
             color: #374151;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 15px;
+            padding: 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            color: #0f172a;
+            background: white;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .form-group input:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
         }
 
         .form-group input.invalid {
             border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
         }
 
-        .field-hint {
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: 4px;
-        }
-
-        .field-error {
-            font-size: 12px;
-            color: #dc2626;
-            margin-top: 4px;
-            display: none;
-        }
+        .field-hint  { font-size: 13px; color: #94a3b8; margin-top: 5px; }
+        .field-error { font-size: 14px; color: #dc2626; margin-top: 5px; display: none; }
 
         .btn-add {
-            padding: 10px 24px;
-            background: #007bff;
+            padding: 14px 24px;
+            background: #16a34a;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             font-size: 15px;
-            font-weight: bold;
+            font-weight: 600;
+            font-family: inherit;
             cursor: pointer;
             white-space: nowrap;
-            height: 42px;
+            transition: background 0.2s, transform 0.15s;
+            align-self: flex-end;
         }
 
-        .btn-add:hover { background: #0056b3; }
+        .btn-add:hover { background: #15803d; transform: translateY(-1px); }
 
-        /* Hidden delete form */
+        .back-link {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 11px 22px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .back-link:hover { background: #1d4ed8; }
+
         #delete-form { display: none; }
     </style>
 </head>
 <body>
 
 <header>
-    <h2>Manage Assessors</h2>
+    <div class="header-title">🧑‍🏫 Manage Assessors</div>
+    <a href="index.html" class="logout-btn">→ Logout</a>
 </header>
 
 <div class="container">
 
-    <!-- ── Assessors Table ── -->
     <div class="card">
-        <p class="card-title">Existing Assessor Accounts</p>
+        <p class="card-title">👥 Existing Assessor Accounts</p>
         <table>
             <thead>
                 <tr>
@@ -209,61 +223,43 @@
                 </tr>
             </thead>
             <tbody id="table-body">
-                <tr>
-                    <td colspan="4" class="empty-cell">Loading assessors&hellip;</td>
-                </tr>
+                <tr><td colspan="4" class="empty-cell">Loading assessors…</td></tr>
             </tbody>
         </table>
     </div>
 
-    <!-- ── Add Assessor Form ── -->
     <div class="card">
-        <p class="card-title">Add New Assessor</p>
-        <form action="../backend/auth/add_assessor.php" method="POST"
-              onsubmit="return validateAddForm(event)">
-
+        <p class="card-title">➕ Add New Assessor</p>
+        <form action="../backend/auth/add_assessor.php" method="POST" onsubmit="return validateAddForm(event)">
             <div class="form-row">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username"
-                           placeholder="e.g. assessor2"
-                           required minlength="4">
+                    <input type="text" id="username" name="username" placeholder="e.g. assessor2" required minlength="4">
                     <div class="field-hint">Minimum 4 characters</div>
                     <div class="field-error" id="err-username">Username must be at least 4 characters.</div>
                 </div>
-
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password"
-                           placeholder="Min. 6 characters"
-                           required minlength="6">
+                    <input type="password" id="password" name="password" placeholder="Min. 6 characters" required minlength="6">
                     <div class="field-hint">Minimum 6 characters</div>
                     <div class="field-error" id="err-password">Password must be at least 6 characters.</div>
                 </div>
-
                 <button type="submit" class="btn-add">Add Assessor</button>
             </div>
         </form>
     </div>
 
-    <a class="back-link" href="admin_dashboard.html">&#8592; Back to Dashboard</a>
+    <a class="back-link" href="admin_dashboard.html">← Back to Dashboard</a>
 </div>
 
-<!-- Hidden delete form -->
 <form id="delete-form" action="../backend/auth/delete_assessor.php" method="POST">
     <input type="hidden" name="user_id" id="delete-uid">
 </form>
 
 <script>
-// Load assessors on page load
 fetch('../backend/auth/get_assessors.php')
-    .then(function(res) {
-        if (!res.ok) throw new Error('Server returned ' + res.status);
-        return res.json();
-    })
-    .then(function(data) {
-        renderTable(data);
-    })
+    .then(function(res) { if (!res.ok) throw new Error('Server returned ' + res.status); return res.json(); })
+    .then(function(data) { renderTable(data); })
     .catch(function(err) {
         document.getElementById('table-body').innerHTML =
             '<tr><td colspan="4" class="error-cell">Could not load assessors: ' + escHtml(err.message) + '</td></tr>';
@@ -271,73 +267,41 @@ fetch('../backend/auth/get_assessors.php')
 
 function renderTable(rows) {
     var tbody = document.getElementById('table-body');
-
-    if (!rows || rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="empty-cell">No assessor accounts found.</td></tr>';
-        return;
-    }
-
+    if (!rows || !rows.length) { tbody.innerHTML = '<tr><td colspan="4" class="empty-cell">No assessor accounts found.</td></tr>'; return; }
     tbody.innerHTML = rows.map(function(r) {
-        return '<tr>' +
-            '<td>' + escHtml(r.user_id)  + '</td>' +
-            '<td>' + escHtml(r.username) + '</td>' +
+        return '<tr><td>' + escHtml(r.user_id) + '</td><td>' + escHtml(r.username) + '</td>' +
             '<td><span class="role-badge">' + escHtml(r.role) + '</span></td>' +
-            '<td>' +
-                '<button class="btn-delete" data-id="' + escHtml(r.user_id) + '" ' +
-                        'data-name="' + escHtml(r.username) + '">' +
-                    'Delete' +
-                '</button>' +
-            '</td>' +
-        '</tr>';
+            '<td><button class="btn-delete" data-id="' + escHtml(r.user_id) + '" data-name="' + escHtml(r.username) + '">Delete</button></td></tr>';
     }).join('');
-
     document.querySelectorAll('.btn-delete').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            handleDelete(this.dataset.id, this.dataset.name);
-        });
+        btn.addEventListener('click', function() { handleDelete(this.dataset.id, this.dataset.name); });
     });
 }
 
 function handleDelete(id, name) {
-    if (confirm('Delete assessor "' + name + '" (ID ' + id + ')?\n\nThis cannot be undone.')) {
+    if (confirm('Delete assessor "' + name + '" (ID ' + id + ')?\nThis cannot be undone.')) {
         document.getElementById('delete-uid').value = id;
         document.getElementById('delete-form').submit();
     }
 }
 
 function validateAddForm(e) {
-    var valid    = true;
+    let valid = true;
     var username = document.getElementById('username');
     var password = document.getElementById('password');
-    var errU     = document.getElementById('err-username');
-    var errP     = document.getElementById('err-password');
-
-    errU.style.display = 'none';
-    errP.style.display = 'none';
-    username.classList.remove('invalid');
-    password.classList.remove('invalid');
-
-    if (username.value.trim().length < 4) {
-        errU.style.display = 'block';
-        username.classList.add('invalid');
-        valid = false;
-    }
-    if (password.value.length < 6) {
-        errP.style.display = 'block';
-        password.classList.add('invalid');
-        valid = false;
-    }
-
+    var errU = document.getElementById('err-username');
+    var errP = document.getElementById('err-password');
+    errU.style.display = 'none'; errP.style.display = 'none';
+    username.classList.remove('invalid'); password.classList.remove('invalid');
+    if (username.value.trim().length < 4) { errU.style.display = 'block'; username.classList.add('invalid'); valid = false; }
+    if (password.value.length < 6) { errP.style.display = 'block'; password.classList.add('invalid'); valid = false; }
     if (!valid) e.preventDefault();
     return valid;
 }
 
 function escHtml(str) {
     return String(str == null ? '' : str)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+        .replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
 

@@ -21,58 +21,58 @@
 
         .card {
             width: 100%;
-            max-width: 420px;
+            max-width: 450px;
             background: white;
             border-radius: 16px;
-            padding: 44px 40px 36px;
+            padding: 48px 44px 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.25);
         }
 
         .logo {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 36px;
         }
 
         .logo-icon {
-            width: 52px;
-            height: 52px;
+            width: 58px;
+            height: 58px;
             background: #2563eb;
             border-radius: 14px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            margin-bottom: 12px;
+            font-size: 28px;
+            margin-bottom: 14px;
         }
 
         h1 {
-            font-size: 20px;
+            font-size: 30px;
             font-weight: 700;
             color: #0f172a;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .subtitle {
-            font-size: 13px;
+            font-size: 14px;
             color: #64748b;
         }
 
         label {
             display: block;
-            font-size: 13px;
+            font-size: 16px;
             font-weight: 600;
             color: #374151;
-            margin-bottom: 6px;
+            margin-bottom: 7px;
         }
 
         .field { margin-bottom: 6px; }
 
         input {
             width: 100%;
-            padding: 10px 14px;
+            padding: 14px;
             border: 1.5px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 10px;
+            font-size: 16px;
             font-family: inherit;
             color: #0f172a;
             background: white;
@@ -87,18 +87,18 @@
 
         input.invalid { border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
 
-        .field-hint { font-size: 11px; color: #94a3b8; margin: 4px 0 16px; }
+        .field-hint { font-size: 13px; color: #94a3b8; margin: 5px 0 18px; }
 
-        .error-msg { font-size: 12px; color: #dc2626; margin: 3px 0 14px; display: none; }
+        .error-msg { font-size: 14px; color: #dc2626; margin: 4px 0 16px; display: none; }
 
         .btn-login {
             width: 100%;
-            padding: 11px;
+            padding: 14px 20px;
             background: #2563eb;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 15px;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: 600;
             font-family: inherit;
             cursor: pointer;
@@ -109,24 +109,22 @@
         .btn-login:hover { background: #1d4ed8; transform: translateY(-1px); }
 
         .hint-box {
-            margin-top: 24px;
+            margin-top: 28px;
             background: #eff6ff;
             border: 1px solid #bfdbfe;
             border-radius: 10px;
-            padding: 14px 16px;
-            font-size: 13px;
+            padding: 16px 18px;
         }
 
         .hint-box .hint-title {
-            font-weight: 600;
+            font-weight: 700;
             color: #1e3a5f;
-            margin-bottom: 8px;
-            font-size: 13px;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
 
-        .hint-row { color: #1e40af; margin: 4px 0; }
-
-        .hint-row span { font-weight: 600; }
+        .hint-row { font-size: 14px; color: #1e40af; margin: 5px 0; }
+        .hint-row span { font-weight: 700; }
     </style>
 </head>
 <body>
@@ -171,20 +169,14 @@ function validateLogin(e) {
     const userErr  = document.getElementById('username-error');
     const passErr  = document.getElementById('password-error');
 
-    userErr.style.display = 'none';
-    passErr.style.display = 'none';
-    username.classList.remove('invalid');
-    password.classList.remove('invalid');
+    userErr.style.display = 'none'; passErr.style.display = 'none';
+    username.classList.remove('invalid'); password.classList.remove('invalid');
 
     if (username.value.trim().length < 4) {
-        userErr.style.display = 'block';
-        username.classList.add('invalid');
-        valid = false;
+        userErr.style.display = 'block'; username.classList.add('invalid'); valid = false;
     }
     if (password.value.length < 6) {
-        passErr.style.display = 'block';
-        password.classList.add('invalid');
-        valid = false;
+        passErr.style.display = 'block'; password.classList.add('invalid'); valid = false;
     }
     if (!valid) e.preventDefault();
     return valid;

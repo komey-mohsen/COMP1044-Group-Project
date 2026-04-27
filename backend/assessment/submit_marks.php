@@ -65,61 +65,61 @@ $score_fmt  = number_format($total_score, 2);
             width: 100%;
             max-width: 480px;
             background: white;
-            border-radius: 20px;
-            padding: 50px 44px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+            border-radius: 16px;
+            padding: 52px 48px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.07);
             text-align: center;
-            margin: 20px;
+            margin: 24px;
         }
 
-        .icon { font-size: 64px; margin-bottom: 16px; }
+        .icon { font-size: 64px; margin-bottom: 18px; }
 
-        h2 { margin: 0 0 14px; color: #111827; font-size: 28px; }
+        h2 { margin: 0 0 16px; color: #0f172a; font-size: 28px; font-weight: 700; }
 
-        .message { font-size: 16px; margin-bottom: 10px; }
-        .success-msg { color: #15803d; }
+        .message { font-size: 16px; margin-bottom: 14px; }
+        .success-msg { color: #16a34a; }
         .error-msg   { color: #dc2626; }
 
         .score-box {
             background: #eff6ff;
             border: 1px solid #bfdbfe;
             border-radius: 12px;
-            padding: 18px 24px;
-            margin: 16px 0 28px;
+            padding: 20px 28px;
+            margin: 18px 0 32px;
             color: #1e40af;
         }
 
         .score-box .score-label {
-            font-size: 14px;
+            font-size: 16px;
             color: #6b7280;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .score-box .score-value {
-            font-size: 38px;
-            font-weight: bold;
-            color: #1f4e79;
+            font-size: 42px;
+            font-weight: 700;
+            color: #1e3a5f;
         }
 
         .score-box .score-unit {
-            font-size: 16px;
-            color: #4e73df;
+            font-size: 18px;
+            color: #2563eb;
         }
 
         .btn {
             display: inline-block;
             margin: 6px;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #4e73df, #1f4e79);
+            padding: 12px 28px;
+            background: #2563eb;
             color: white;
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            transition: opacity 0.15s;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s;
         }
 
-        .btn:hover { opacity: 0.9; }
+        .btn:hover { background: #1d4ed8; }
     </style>
 </head>
 <body>

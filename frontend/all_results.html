@@ -4,154 +4,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Results</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+            min-height: 100vh;
+            font-size: 16px;
         }
 
         header {
-            background: #1f4e79;
-            color: white;
-            padding: 15px 30px;
+            background: #1e3a5f;
+            padding: 0 32px;
+            height: 66px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        header h2 { margin: 0; font-size: 22px; }
+        .header-title { color: white; font-size: 20px; font-weight: 700; }
 
         .logout-btn {
             background: transparent;
-            border: 2px solid white;
+            border: 1.5px solid rgba(255,255,255,0.5);
             color: white;
             padding: 8px 18px;
-            border-radius: 6px;
+            border-radius: 10px;
             text-decoration: none;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 500;
+            font-family: inherit;
+            transition: background 0.2s;
         }
 
-        .logout-btn:hover { background: rgba(255,255,255,0.15); }
+        .logout-btn:hover { background: rgba(255,255,255,0.12); border-color: white; }
 
         .container {
-            width: 90%;
-            max-width: 1000px;
-            margin: 30px auto;
+            width: 92%;
+            max-width: 960px;
+            margin: 36px auto;
         }
 
-        /* ── Toolbar ── */
         .toolbar {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             margin-bottom: 18px;
             flex-wrap: wrap;
         }
 
+        .search-wrap { flex: 1; min-width: 240px; position: relative; }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 16px;
+            pointer-events: none;
+        }
+
         .search-box {
-            flex: 1;
-            min-width: 220px;
-            padding: 10px 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 7px;
-            font-size: 15px;
+            width: 100%;
+            padding: 13px 14px 13px 42px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            color: #0f172a;
+            background: white;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .search-box:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
         }
 
-        .result-count {
-            font-size: 14px;
-            color: #6b7280;
-            white-space: nowrap;
-        }
+        .result-count { font-size: 15px; color: #64748b; font-weight: 500; white-space: nowrap; }
 
-        /* ── Card / Table ── */
         .card {
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
             overflow-x: auto;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 15px;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 15px; }
 
         thead th {
-            background: #1f4e79;
+            background: #1e3a5f;
             color: white;
-            padding: 12px 16px;
+            padding: 14px 16px;
             text-align: left;
+            font-weight: 600;
+            font-size: 15px;
             white-space: nowrap;
         }
 
-        tbody tr:nth-child(even) { background: #f8f9fb; }
-        tbody tr:hover           { background: #eef2f7; }
+        thead th:first-child { border-radius: 12px 0 0 0; }
+        thead th:last-child  { border-radius: 0 12px 0 0; }
+
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        tbody tr:hover { background: #eff6ff; }
 
         tbody td {
-            padding: 11px 16px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .score-cell { font-weight: bold; }
-
-        .score-high   { color: #15803d; }
-        .score-mid    { color: #b45309; }
-        .score-low    { color: #dc2626; }
-
-        .empty-cell, .error-cell {
-            text-align: center;
-            padding: 32px;
-            color: #6b7280;
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
             font-size: 15px;
         }
 
+        .score-cell { font-weight: 600; }
+        .score-high { color: #16a34a; }
+        .score-mid  { color: #d97706; }
+        .score-low  { color: #dc2626; }
+
+        .empty-cell, .error-cell { text-align: center; padding: 44px; color: #94a3b8; font-size: 16px; }
         .error-cell { color: #dc2626; }
 
-        /* ── Back link ── */
         .back-link {
             display: inline-block;
-            margin-top: 20px;
-            padding: 10px 18px;
-            background: #007bff;
+            margin-top: 22px;
+            padding: 11px 22px;
+            background: #2563eb;
             color: white;
             text-decoration: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: bold;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: background 0.2s;
         }
 
-        .back-link:hover { background: #0056b3; }
+        .back-link:hover { background: #1d4ed8; }
     </style>
 </head>
 <body>
 
 <header>
-    <h2>All Student Results</h2>
-    <a href="index.html" class="logout-btn">&#x2192; Logout</a>
+    <div class="header-title">📊 All Student Results</div>
+    <a href="index.html" class="logout-btn">→ Logout</a>
 </header>
 
 <div class="container">
 
     <div class="toolbar">
-        <input
-            type="text"
-            id="search"
-            class="search-box"
-            placeholder="Search by student name or ID…"
-            oninput="filterTable()"
-        >
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search" class="search-box"
+                   placeholder="Search by student name or ID…"
+                   oninput="filterTable()">
+        </div>
         <span class="result-count" id="result-count"></span>
     </div>
 
@@ -166,28 +178,20 @@
                 </tr>
             </thead>
             <tbody id="table-body">
-                <tr>
-                    <td colspan="4" class="empty-cell">Loading results&hellip;</td>
-                </tr>
+                <tr><td colspan="4" class="empty-cell">Loading results…</td></tr>
             </tbody>
         </table>
     </div>
 
-    <a class="back-link" href="admin_dashboard.html">&#8592; Back to Dashboard</a>
+    <a class="back-link" href="admin_dashboard.html">← Back to Dashboard</a>
 </div>
 
 <script>
 var allRows = [];
 
 fetch('../backend/results/get_all_results.php')
-    .then(function(res) {
-        if (!res.ok) throw new Error('Server returned ' + res.status);
-        return res.json();
-    })
-    .then(function(data) {
-        allRows = data;
-        renderTable(allRows);
-    })
+    .then(function(res) { if (!res.ok) throw new Error('Server returned ' + res.status); return res.json(); })
+    .then(function(data) { allRows = data; renderTable(allRows); })
     .catch(function(err) {
         document.getElementById('table-body').innerHTML =
             '<tr><td colspan="4" class="error-cell">Could not load results: ' + escHtml(err.message) + '</td></tr>';
@@ -197,51 +201,29 @@ fetch('../backend/results/get_all_results.php')
 function renderTable(rows) {
     var tbody = document.getElementById('table-body');
     var count = document.getElementById('result-count');
-
-    if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="4" class="empty-cell">No results found.</td></tr>';
-        count.textContent = '';
-        return;
-    }
-
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="4" class="empty-cell">No results found.</td></tr>'; count.textContent = ''; return; }
     count.textContent = rows.length + ' record' + (rows.length !== 1 ? 's' : '');
-
     tbody.innerHTML = rows.map(function(r) {
-        var score    = parseFloat(r.final_score);
-        var scoreStr = isNaN(score) ? '—' : score.toFixed(2);
-        var cls      = score >= 70 ? 'score-high' : score >= 50 ? 'score-mid' : 'score-low';
-
-        return '<tr>' +
-            '<td>' + escHtml(r.student_id)   + '</td>' +
-            '<td>' + escHtml(r.student_name) + '</td>' +
-            '<td>' + escHtml(r.company_name) + '</td>' +
-            '<td class="score-cell ' + cls + '">' + scoreStr + ' / 100</td>' +
-        '</tr>';
+        var score = parseFloat(r.final_score);
+        var str   = isNaN(score) ? '—' : score.toFixed(2);
+        var cls   = score >= 70 ? 'score-high' : score >= 50 ? 'score-mid' : 'score-low';
+        return '<tr><td>' + escHtml(r.student_id) + '</td><td>' + escHtml(r.student_name) + '</td>' +
+               '<td>' + escHtml(r.company_name) + '</td>' +
+               '<td class="score-cell ' + cls + '">' + str + ' / 100</td></tr>';
     }).join('');
 }
 
 function filterTable() {
     var term = document.getElementById('search').value.trim().toLowerCase();
-
-    if (!term) {
-        renderTable(allRows);
-        return;
-    }
-
-    var filtered = allRows.filter(function(r) {
-        return r.student_name.toLowerCase().includes(term) ||
-               String(r.student_id).includes(term);
-    });
-
-    renderTable(filtered);
+    if (!term) { renderTable(allRows); return; }
+    renderTable(allRows.filter(function(r) {
+        return r.student_name.toLowerCase().includes(term) || String(r.student_id).includes(term);
+    }));
 }
 
 function escHtml(str) {
     return String(str == null ? '' : str)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+        .replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
 

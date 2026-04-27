@@ -89,7 +89,7 @@ $result = $conn->query($sql);
         <p class="error">No results found for this student ID.</p>
     <?php endif; ?>
 
-    <a class="back-btn" href="../../frontend/results.html">← Back</a>
+    <a class="back-btn" href="../../frontend/assessor_dashboard.html">← Back to Dashboard</a>
 </div>
 </body>
 </html>

@@ -21,13 +21,12 @@ if ($success && mysqli_affected_rows($conn) === 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Student</title>
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f1f5f9;
             min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1f4e79, #4e73df);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -35,37 +34,37 @@ if ($success && mysqli_affected_rows($conn) === 0) {
 
         .card {
             width: 100%;
-            max-width: 460px;
+            max-width: 480px;
             background: white;
-            border-radius: 20px;
-            padding: 50px 44px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+            border-radius: 16px;
+            padding: 52px 48px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.07);
             text-align: center;
-            margin: 20px;
+            margin: 24px;
         }
 
-        .icon { font-size: 64px; margin-bottom: 16px; }
+        .icon { font-size: 64px; margin-bottom: 18px; }
 
-        h2 { margin: 0 0 14px; color: #111827; font-size: 28px; }
+        h2 { margin: 0 0 16px; color: #0f172a; font-size: 28px; font-weight: 700; }
 
-        .message { font-size: 16px; margin-bottom: 28px; }
-        .success-msg { color: #15803d; }
+        .message { font-size: 16px; margin-bottom: 32px; }
+        .success-msg { color: #16a34a; }
         .error-msg   { color: #dc2626; }
 
         .btn {
             display: inline-block;
             margin: 6px;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #4e73df, #1f4e79);
+            padding: 12px 28px;
+            background: #2563eb;
             color: white;
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            transition: opacity 0.15s;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s;
         }
 
-        .btn:hover { opacity: 0.9; }
+        .btn:hover { background: #1d4ed8; }
     </style>
 </head>
 <body>
