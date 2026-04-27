@@ -126,6 +126,7 @@
     </div>
 
     <form action="../backend/results/view_results.php" method="POST" onsubmit="return validateResults(event)">
+        <input type="hidden" id="role_field" name="role" value="">
 
         <div class="field">
             <label for="student_id">Student ID</label>
@@ -142,10 +143,22 @@
     </form>
 
     <hr class="divider">
-    <a href="assessor_dashboard.html" class="back-link">← Back to Dashboard</a>
+    <a id="back-link" href="assessor_dashboard.html" class="back-link">← Back to Dashboard</a>
 </div>
 
 <script>
+window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role') || '';
+    document.getElementById('role_field').value = role;
+    const backLink = document.getElementById('back-link');
+    if (role === 'admin') {
+        backLink.href = 'admin_dashboard.html';
+    } else {
+        backLink.href = 'assessor_dashboard.html';
+    }
+};
+
 function validateResults(e) {
     const sid    = document.getElementById('student_id');
     const sidErr = document.getElementById('sid-error');

@@ -6,6 +6,10 @@ if ($conn->connect_error) {
 }
 
 $student_id = $_POST['student_id'];
+$role = $_POST['role'] ?? '';
+$back_href = ($role === 'admin')
+    ? '../../frontend/admin_dashboard.html'
+    : '../../frontend/assessor_dashboard.html';
 
 $sql = "
 SELECT s.name, i.company_name, a.total
@@ -89,7 +93,7 @@ $result = $conn->query($sql);
         <p class="error">No results found for this student ID.</p>
     <?php endif; ?>
 
-    <a class="back-btn" href="../../frontend/assessor_dashboard.html">← Back to Dashboard</a>
+    <a class="back-btn" href="<?= htmlspecialchars($back_href) ?>">← Back to Dashboard</a>
 </div>
 </body>
 </html>
