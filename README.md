@@ -20,6 +20,9 @@
 Copy the entire project folder into your MAMP htdocs:
 - **Windows:** `C:\MAMP\htdocs\COMP1044-Group-Project-main\`
 - **Mac:** `/Applications/MAMP/htdocs/COMP1044-Group-Project-main/`
+⚠️ Important: After extracting the ZIP, open the extracted folder. 
+Inside you will find ANOTHER folder called COMP1044-Group-Project-main. 
+Copy THIS inner folder into C:\MAMP\htdocs\
 
 ### Step 3 - Setup the Database
 1. Go to `http://localhost/phpmyadmin`
