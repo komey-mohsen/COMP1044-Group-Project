@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 27, 2026 at 01:40 PM
+-- Generation Time: Apr 27, 2026 at 03:34 PM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.1
 
@@ -73,7 +73,8 @@ INSERT INTO `internships` (`internship_id`, `student_id`, `assessor_id`, `compan
 (16, 2001, 13, 'Microsoft Malaysia'),
 (17, 2002, 13, 'Google Asia Pacific'),
 (18, 2003, 14, 'IBM Malaysia'),
-(19, 2004, 14, 'Dell Technologies');
+(19, 2004, 14, 'Dell Technologies'),
+(20, 4444, 13, 'pepsi');
 
 -- --------------------------------------------------------
 
@@ -95,7 +96,8 @@ INSERT INTO `students` (`student_id`, `name`, `programme`) VALUES
 (2001, 'Ahmad Razif', 'Computer Science'),
 (2002, 'Nurul Aina', 'Information Technology'),
 (2003, 'Khaled Hassan', 'Software Engineering'),
-(2004, 'Lim Wei Jian', 'Computer Science');
+(2004, 'Lim Wei Jian', 'Computer Science'),
+(4444, 'hany', 'science');
 
 -- --------------------------------------------------------
 
@@ -118,7 +120,8 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `role`) VALUES
 (12, 'admin', 'admin123', 'admin'),
 (13, 'dr.sarah', 'pass123', 'assessor'),
 (14, 'dr.james', 'pass456', 'assessor'),
-(15, 'assessor1', 'pass123', 'assessor');
+(16, 'mohamed', 'mo12378', 'assessor'),
+(17, 'assessor1', 'pass123', 'assessor');
 
 --
 -- Indexes for dumped tables
@@ -165,13 +168,13 @@ ALTER TABLE `assessments`
 -- AUTO_INCREMENT for table `internships`
 --
 ALTER TABLE `internships`
-  MODIFY `internship_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `internship_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
